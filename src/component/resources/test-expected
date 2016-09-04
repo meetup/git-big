@@ -1,0 +1,6 @@
+{"repo":"meetup","commit":"090976b","author":"someone@meetup.com","timestamp":"2016-08-25 18:31:21","file":"email/reminder_rollup.email.html","extension":"html","added":1,"deleted":1}
+{"repo":"meetup","commit":"530d8f3","author":"someone2@meetup.com","timestamp":"2016-08-25 14:52:36","file":"ivy.xml","extension":"xml","added":1,"deleted":1}
+{"repo":"meetup","commit":"a3cb7a1","author":"someone3@meetup.com","timestamp":"2016-08-25 11:35:48","file":"static/script/mobile/comments/ThreadController.js","extension":"js","added":1,"deleted":1}
+{"repo":"meetup","commit":"544b094","author":"someone4@meetup.com","timestamp":"2016-08-24 16:27:32","file":"modules/chapstick/src/test/scala/com/meetup/business/ttdl/LatencyEstimatorTest.scala","extension":"scala","category":"test","added":10,"deleted":9}
+{"repo":"meetup","commit":"93c240d","author":"someone5@meetup.com","timestamp":"2016-08-24 14:47:03","file":".gitignore","extension":"gitignore","added":3,"deleted":3}
+{"repo":"meetup","commit":"93c240d","author":"someone5@meetup.com","timestamp":"2016-08-24 14:47:03","file":"util/db/MUP-3626_schema_update.sql","extension":"sql","added":5,"deleted":6}

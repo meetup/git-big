@@ -11,6 +11,7 @@ trait CommitParser {
 object CommitParser extends CommitParser with Logging {
 
   def parse(commit: String): Option[Commit] = {
+
     val parsedCommit = HeaderParser.parse(commit).map { header =>
       val changes = ChangeParser.parse(commit, Some(Classifier))
 

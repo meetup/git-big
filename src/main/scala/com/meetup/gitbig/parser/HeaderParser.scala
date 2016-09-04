@@ -3,7 +3,11 @@ package com.meetup.gitbig.parser
 import com.meetup.gitbig.Header
 import com.meetup.logging.Logging
 
-object HeaderParser extends Logging {
+trait HeaderParser {
+  def parse(logEntry: String, dateTimeParser: DateTimeParser = DateTimeParser): Option[Header]
+}
+
+object HeaderParser extends HeaderParser with Logging {
   val pattern = """\"(.+)\",\"(.+)\",\"(.+)\"""".r
 
   def parse(
@@ -18,7 +22,6 @@ object HeaderParser extends Logging {
 
     commitHeaders.lastOption.flatMap {
       case pattern(id, author, timestamp) =>
-        println("id:" + id)
         dateTimeParser.parse(timestamp).map { dateTime =>
           Header(id, author, dateTime)
         }

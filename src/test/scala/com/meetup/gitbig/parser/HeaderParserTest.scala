@@ -65,6 +65,13 @@ class HeaderParserTest extends FunSpec with Matchers with MockitoSugar {
 
       actual shouldBe expected
     }
+
+    it("should handle parse failures gracefully") {
+      val expected = None
+      val actual = HeaderParser.parse("blah")
+
+      actual shouldBe expected
+    }
   }
 
 }

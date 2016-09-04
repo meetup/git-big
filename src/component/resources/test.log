@@ -1,0 +1,22 @@
+
+"090976b","someone@meetup.com","2016-08-25 18:31:21 -0400"
+1       1       email/reminder_rollup.email.html
+
+"530d8f3","someone2@meetup.com","2016-08-25 14:52:36 -0400"
+1       1       ivy.xml
+-       -       lib/base/jira_2.11-0.1.19.jar
+-       -       lib/base/jira_2.11-11.0.0.jar
+
+"a3cb7a1","someone3@meetup.com","2016-08-25 11:35:48 -0400"
+1       1       static/script/mobile/comments/ThreadController.js
+
+"544b094","someone4@meetup.com","2016-08-24 16:27:32 -0400"
+10      9       modules/chapstick/src/test/scala/com/meetup/business/ttdl/LatencyEstimatorTest.scala
+
+"161f4c6","someone@meetup.com","2016-08-24 15:18:36 -0400"
+-       -       lib/base/jira_2.11-0.1.19.jar
+-       -       lib/base/jira_2.11-11.0.0.jar
+
+"93c240d","someone5@meetup.com","2016-08-24 14:47:03 -0400"
+3       3       .gitignore
+5       6       util/db/MUP-3626_schema_update.sql

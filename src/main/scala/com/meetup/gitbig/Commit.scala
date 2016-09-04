@@ -18,5 +18,5 @@ case class Change(
 case class Header(
   commit: String,
   author: String,
-  date: LocalDateTime
+  dateTime: LocalDateTime
 )

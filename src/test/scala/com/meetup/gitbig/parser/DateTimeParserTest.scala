@@ -15,6 +15,12 @@ class DateTimeParserTest extends FunSpec with Matchers {
 
       actual shouldBe expected
     }
+
+    it("should handle parse fails gracefully") {
+      val expected = None
+      val actual = DateTimeParser.parse("blah")
+      actual shouldBe expected
+    }
   }
 
 }

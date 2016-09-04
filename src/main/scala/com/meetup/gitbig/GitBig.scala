@@ -1,25 +1,19 @@
 package com.meetup.gitbig
 
-import com.meetup.gitbig.parser.CommitParser
+import java.io.BufferedWriter
+
+import com.meetup.gitbig.parser.LogParser
+import com.meetup.gitbig.util.CommitRenderer
 
 import scala.io.Source
 
-class GitBig(commitParser: CommitParser) {
+object GitBig {
 
-  def out(source: Source, writer: Commit => Unit): Unit = {
-    val lastCommit = source.getLines().fold("") { (buffer, l) =>
-      l.trim match {
-        case "" =>
-          if (buffer.trim.nonEmpty) {
-            commitParser.parse(buffer.trim).foreach(writer)
-          }
-          ""
-        case x => s"$buffer\n$x"
-      }
-    }
-
-    if (lastCommit.trim.nonEmpty) {
-      commitParser.parse(lastCommit.trim).foreach(writer)
-    }
+  def apply(source: Source, writer: BufferedWriter, repo: String): Unit = {
+    new LogParser().parse(source, { commit =>
+      writer.write(CommitRenderer.json(repo, commit))
+      writer.newLine()
+    })
   }
+
 }

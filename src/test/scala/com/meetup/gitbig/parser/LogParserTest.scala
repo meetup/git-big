@@ -1,25 +1,24 @@
-package com.meetup.gitbig
+package com.meetup.gitbig.parser
 
 import java.time.LocalDateTime
 
-import com.meetup.gitbig.parser.CommitParser
+import com.meetup.gitbig.{Change, Commit, Header}
 import org.mockito.Mockito.when
-import org.scalatest.{FunSpec, Matchers}
 import org.scalatest.mock.MockitoSugar
+import org.scalatest.{FunSpec, Matchers}
 
 import scala.collection.mutable
 import scala.io.Source
 
-class GitBigTest extends FunSpec with Matchers with MockitoSugar {
+class LogParserTest extends FunSpec with Matchers with MockitoSugar {
 
-  describe("GitBig") {
+  describe("LogParser") {
     it("should parse a single commit log") {
       val input = """
         |"530d8f3","someone@meetup.com","Thu Aug 25 14:52:36 2016 -0400"
         |1       1       ivy.xml
         |-       -       lib/base/jira_2.11-0.1.19.jar
-        |-       -       lib/base/jira_2.11-11.0.0.jar
-      """.stripMargin
+        |-       -       lib/base/jira_2.11-11.0.0.jar""".stripMargin
 
       val expected = Commit(
         Header("530d8f3", "someone@meetup.com", LocalDateTime.of(2016, 8, 25, 14, 52, 36)),
@@ -32,7 +31,7 @@ class GitBigTest extends FunSpec with Matchers with MockitoSugar {
       val commitParser = mock[CommitParser]
       when(commitParser.parse(input.trim)).thenReturn(Some(expected))
 
-      new GitBig(commitParser).out(Source.fromString(input), out)
+      new LogParser(commitParser).parse(Source.fromString(input), out)
 
       val actual = outBuffer.toList
 
@@ -74,7 +73,7 @@ class GitBigTest extends FunSpec with Matchers with MockitoSugar {
       when(commitParser.parse(input.trim)).thenReturn(Some(expected))
       when(commitParser.parse(input2.trim)).thenReturn(Some(expected2))
 
-      new GitBig(commitParser).out(Source.fromString(input + input2), out)
+      new LogParser(commitParser).parse(Source.fromString(input + input2), out)
 
       val actual = outBuffer.toList
 
