@@ -46,7 +46,7 @@ object GitBigApp extends Logging {
         } else if (outputFile.exists()) {
           outputExistsAndExit(output)
 
-        } else if (!outputFile.getParentFile.canWrite()) {
+        } else if (!outputFile.getAbsoluteFile.getParentFile.canWrite()) {
           outputNotWritableAndExit(output)
 
         } else {
