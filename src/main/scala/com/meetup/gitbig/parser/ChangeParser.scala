@@ -9,7 +9,7 @@ trait ChangeParser {
 
 object ChangeParser extends ChangeParser {
 
-  val pattern = """(?m)^(\d+) +(\d+) +(.*)""".r
+  val pattern = """(?m)^(\d+)\s+(\d+)\s+(.*)""".r
 
   def parse(commit: String, classifier: Option[Classifier]): List[Change] = {
     pattern.findAllIn(commit).toList.map { line =>
