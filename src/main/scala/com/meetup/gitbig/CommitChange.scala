@@ -2,9 +2,9 @@ package com.meetup.gitbig
 
 import java.time.LocalDateTime
 
-case class Commit(
+case class CommitChange(
   header: Header,
-  changes: List[Change]
+  change: Change
 )
 
 case class Change(
