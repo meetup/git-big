@@ -7,7 +7,7 @@ trait Classifier {
 object Classifier extends Classifier {
 
   def classify(fileName: String): Option[String] = {
-    if (fileName.toLowerCase.contains("test") ||
+    if (fileName.contains("test") ||
       fileName.contains("/it/") ||
       fileName.contains("/component/")) {
       Some("test")
