@@ -12,6 +12,13 @@ class ClassifierTest extends FunSpec with Matchers {
       actual shouldBe expected
     }
 
+    it("should classify some obscured test file") {
+      val expected = Some("test")
+      val actual = Classifier.classify("util/somethingTest.sh")
+
+      actual shouldBe expected
+    }
+
     it("should return none on unrecognized files") {
       val expected = None
       val actual = Classifier.classify("acsdf")
