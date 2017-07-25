@@ -25,9 +25,9 @@ before_install:
 script:
   - >
     if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
-      make publish;
+      make version;
     else
-      make package;
+      make version;
     fi
 
 after_success:
