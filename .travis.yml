@@ -34,7 +34,7 @@ after_success:
   - >
     if [ "${TRAVIS_PULL_REQUEST}" = "false" ] && [ "${TRAVIS_BRANCH}" = "master" ]; then
       eval "$(ssh-agent)";
-      echo $GITHUB_DEPLOY_KEY | base64 --decode > /tmp/github_deploy_key;
+      echo $GITHUB_DEPLOY_KEY > /tmp/github_deploy_key;
       chmod 600 /tmp/github_deploy_key;
       ssh-add /tmp/github_deploy_key;
 
