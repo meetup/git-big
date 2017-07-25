@@ -37,7 +37,9 @@ after_success:
       echo $GITHUB_DEPLOY_KEY > /tmp/github_deploy_key;
       chmod 600 /tmp/github_deploy_key;
       ssh-add /tmp/github_deploy_key;
-
+    fi
+  - >
+    if [ "${TRAVIS_PULL_REQUEST}" = "false" ] && [ "${TRAVIS_BRANCH}" = "master" ]; then
       git config --global user.email "builds@travis-ci.org";
       git config --global user.name "Travis CI";
 
