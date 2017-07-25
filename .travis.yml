@@ -17,7 +17,10 @@ env:
     - CI_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
 
 before_install:
-  - docker login --username $DOCKER_USER --password $DOCKER_PASS
+  - >
+    if [ -n "$DOCKER_USER" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
+      docker login --username $DOCKER_USER --password $DOCKER_PASS;
+    fi
 
 script:
   - >
@@ -27,3 +30,20 @@ script:
       make package;
     fi
 
+after_success:
+  - >
+    if [ "${TRAVIS_PULL_REQUEST}" = "false" ] && [ "${TRAVIS_BRANCH}" = "master" ]; then
+      eval "$(ssh-agent)";
+      echo $GITHUB_DEPLOY_KEY > /tmp/github_deploy_key;
+      chmod 600 /tmp/github_deploy_key;
+      ssh-add /tmp/github_deploy_key;
+
+      git config --global user.email "builds@travis-ci.org";
+      git config --global user.name "Travis CI";
+
+      export GIT_TAG=v$(make version);
+      echo "GIT_TAG=$GIT_TAG";
+
+      git tag $GIT_TAG -f -a -m "Version $GIT_TAG built by Travis CI - https://travis-ci.org/$TRAVIS_REPO_SLUG/jobs/$TRAVIS_JOB_ID";
+      git push -q git@github.com:$TRAVIS_REPO_SLUG.git --tags;
+    fi
