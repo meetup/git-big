@@ -1,0 +1,29 @@
+sudo: required
+
+branches:
+  except:
+    - /^v\d+$/
+
+services:
+  - docker
+
+cache:
+  directories:
+  - "$HOME/.ivy2"
+  - "$HOME/.sbt"
+
+env:
+  global:
+    - CI_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
+
+before_install:
+  - docker login --username $DOCKER_USER --password $DOCKER_PASS
+
+script:
+  - >
+    if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
+      make publish;
+    else
+      make package;
+    fi
+

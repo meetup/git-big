@@ -9,42 +9,48 @@ CI_WORKDIR ?= $(shell pwd)
 VERSION ?= $(CI_BUILD_NUMBER)
 
 BUILDER_TAG = "meetup/sbt-builder:0.1.3"
+BASE_TAG = "meetup/git-big-base:$(VERSION)"
+PUBLISH_TAG = "meetup/git-big:$(VERSION)"
+LATEST_TAG = "meetup/git-big:latest"
 
-# lists all available targets
-list:
-	@sh -c "$(MAKE) -p no_op__ | \
-		awk -F':' '/^[a-zA-Z0-9][^\$$#\/\\t=]*:([^=]|$$)/ {split(\$$1,A,/ /);\
-		for(i in A)print A[i]}' | \
-		grep -v '__\$$' | \
-		grep -v 'make\[1\]' | \
-		grep -v 'Makefile' | \
-		sort"
+help: ## print out all available commands
+	@echo Public targets:
+	@grep -E '^[^_][^_][a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
+	@echo "Private targets: (use at own risk)"
+	@grep -E '^__[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[35m%-20s\033[0m %s\n", $$1, $$2}'
 
-# required for list
-no_op__:
+__package-sbt: ## Internal target used by sbt-builder
+	# This step includes the running of my unit tests.
+	sbt 'docker:publishLocal'
 
-package-sbt:
-	sbt test:test publishLocal
+__package-base: ## Create base image used
+	docker build --build-arg CI_BUILD_NUMBER=$(CI_BUILD_NUMBER) -t $(BASE_TAG) base
 
-# We clean the locally cached version
-# of the jar when we're done publishing.
-publish-sbt: package-sbt component-test-sbt
-	sbt publish cleanLocal
-
-component-test-sbt:
-	cd src/component/sbt && sbt component:test
-
-publish:
-    docker pull $(BUILDER_TAG)
+package: __package-base ## Create container
+	# Run a docker container mounting the
+	# working directory and caches.
 	docker run \
 		--rm \
 		-v $(CI_WORKDIR):/data \
 		-v $(CI_IVY_CACHE):/root/.ivy2 \
 		-v $(CI_SBT_CACHE):/root/.sbt \
+		-v /var/run/docker.sock:/var/run/docker.sock \
 		-e VERSION=$(VERSION) \
 		$(BUILDER_TAG) \
-		make publish-sbt
+		make __package-sbt
+
+publish: package ## Packages and then pushes docker image to registry.
+	@docker tag $(PUBLISH_TAG) $(LATEST_TAG)
+	@docker push $(PUBLISH_TAG)
+	@docker push $(LATEST_TAG)
+
+base-tag: ## Used by sbt to get base image for docker.
+	@echo $(BASE_TAG)
 
 # Required for SBT.
 version:
 	@echo $(VERSION)
+
+# Required for Docker plugin.
+publish-tag:
+	@echo $(PUBLISH_TAG)
