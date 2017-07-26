@@ -7,9 +7,7 @@ resolvers += Resolver.bintrayRepo("meetup", "maven")
 
 daemonUser in Docker := "root"
 
-defaultLinuxInstallLocation in Docker := "/opt"
-
-dockerEntrypoint := Seq("/opt/entrypoint.sh")
+defaultLinuxInstallLocation in Docker := "/opt/app"
 
 libraryDependencies ++= Seq(
   "com.meetup" %% "scala-logger" % "0.1.9",
